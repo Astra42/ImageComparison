@@ -1,5 +1,6 @@
 from image_comparison import Images_comparison
 import streamlit as st
+import matplotlib.image as mpimg
 import numpy as np
 import cv2
 import os
@@ -9,8 +10,9 @@ def compare_images(img1, img2):
     comparison = Images_comparison(img1, img2)
     st.write(f"SSIM: {comparison.find_SSIM()}")
     st.write(f"Similarity: {comparison.bin_mask_fullness()}")
-    # m = comparison.binary_masks(use_m_filt=True)
-    # st.image(m[0])
+    m = comparison.binary_masks(use_m_filt=True)
+    mpimg.imsave("out.jpg", m[0])
+    st.image("out.jpg")
     # st.write(m[0].shape)
 
 
