@@ -9,11 +9,7 @@ python3 -m venv .env
 source .env/bin/activate
 pip install -r requirements.txt
 ```
-Run creator service
+Run streamlit services
 ```
 streamlit run main.py
-```
-Run image comparison service
-```
-streamlit run img.py
 ```
