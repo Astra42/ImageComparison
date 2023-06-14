@@ -8,7 +8,7 @@ import os
 images_count = st.text_input("write a number of image pairs", value=1)
 
 percent = st.slider("choose a percent of identify", min_value=0.0, max_value=1.0)
-elem_count = st.text_input("write an elem of images", value=100)
+elem_count = st.text_input("write an elem of images", value=20)
 form_count =  st.text_input("write a form count", value=5)
 
 result = st.button("create image pares")

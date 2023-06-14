@@ -89,10 +89,10 @@ def overlay_transparent(background, overlay, x, y):
     return background
 
 
-def getTemplate(scale_percent=28):
+def getTemplate(scale_percent=50):
     temp_dir = 'content/TemplatesJPG'  #папка шаблонов
     temp_names = os.listdir(temp_dir)
-    template = cv2.imread(f"{temp_dir}/{7}.jpg")
+    template = cv2.imread(f"{temp_dir}/{rm.choice(temp_names)}")
     width = int(template.shape[1] * scale_percent / 100)
     height = int(template.shape[0] * scale_percent / 100)
     dim = (width, height)
@@ -107,14 +107,14 @@ def getTemplate(scale_percent=28):
 #Base
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------
 class Polygon:
-  def __init__(self, xy, shape):
-    self.xy = xy
-    self.x = xy[0]
-    self.y = xy[1]
-    self.shape = shape
-    self.w = shape[0]
-    self.h = shape[1]
-    self.square = self.w*self.h
+    def __init__(self, xy, shape):
+        self.xy = xy
+        self.x = xy[0]
+        self.y = xy[1]
+        self.shape = shape
+        self.w = shape[0]
+        self.h = shape[1]
+        self.square = self.w*self.h
 
 
 class Polygon_finder:
@@ -200,19 +200,19 @@ class Rectangle:
 
 
 def draw_rectangle(img, polygon, min_square, putting_img):
-  #здесь последний уровень вложенности, где можно обратиться к putting_img и найти ее внутренности
+    #здесь последний уровень вложенности, где можно обратиться к putting_img и найти ее внутренности
 
-  r = Rectangle(polygon, min_square)
-  #можешь изменить polygon_inside так: r.polygon_inside= ...
-  x,y = r.start_point
-  w,h = r.shape
-  wi,hi = putting_img.shape[0:2]
-  k = min(w/wi, h/hi)
-  resized_img = cv2.resize(putting_img, (int(hi*k), int(wi*k)))
-  img = overlay_transparent(img, resized_img, y, x)
-  # img[x:x+w, y:y+h,:]=resized_img
-  # print("log resized_img.shape and .img.shape", resized_img.shape,img.shape, y+h, x+w)
-  return r
+    r = Rectangle(polygon, min_square)
+    #можешь изменить polygon_inside так: r.polygon_inside= ...
+    x,y = r.start_point
+    w,h = r.shape
+    wi,hi = putting_img.shape[0:2]
+    k = min(w/wi, h/hi)
+    resized_img = cv2.resize(putting_img, (int(hi*k), int(wi*k)))
+    img = overlay_transparent(img, resized_img, y, x)
+    # img[x:x+w, y:y+h,:]=resized_img
+    # print("log resized_img.shape and .img.shape", resized_img.shape,img.shape, y+h, x+w)
+    return r
 
 
 class Plot:
@@ -288,7 +288,7 @@ def make_random_images(count, percent, form_count=4, dict_of_k={"r":0.01, "f":0.
         if can_continue:
             c += 1
 
-        if c/count>=percent and len(res)==0:
+        if c / count >= percent and len(res)==0:
             res.append(plot.img.copy())
 
         if not can_continue:
@@ -300,6 +300,16 @@ def make_random_images(count, percent, form_count=4, dict_of_k={"r":0.01, "f":0.
             res.append(plot.img)
             break
     #размещаем на шаблонах
-    for r in res:
-        r = overlay_transparent(template, r, mf.leftcorner.x, mf.leftcorner.y)
+    # for r in range(len(res)):
+    #     res[r] = overlay_transparent(template, res[r], mf.leftcorner.x, mf.leftcorner.y)
+
+    # for r in res:
+    #    r = overlay_transparent(template, r, mf.leftcorner.x, mf.leftcorner.y)
+
+    for idx, elem in enumerate(res):
+       template_ = template.copy()
+       res[idx] = overlay_transparent(template_, elem, mf.leftcorner.x, mf.leftcorner.y)
+
+    # res[0] = overlay_transparent(template, res[0], mf.leftcorner.x, mf.leftcorner.y)
+
     return res
